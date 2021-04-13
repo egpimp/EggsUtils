@@ -14,7 +14,7 @@ using EggsBuffs.Properties;
 namespace EggsBuffs
 {
     [BepInDependency("com.EnigmaDev.EnigmaticThunder", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.0")]
+    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.1")]
     public class BuffsLoading : BaseUnityPlugin
     {
         public static BuffDef buffDefTemporalChains;
@@ -28,7 +28,7 @@ namespace EggsBuffs
         private static float stasisOnHitCompare = 3f;
         public void Awake()
         {
-            //Stacking slow.  At 8 stacks instead take a burst of damage, stun for one second, and reset stacks
+            //Stacking slow.  At 8 stacks instead take a burst of damage, stun for two seconds, and reset stacks
             buffDefTemporalChains = BuffBuilder(Color.blue,true, Assets.placeHolderIcon, true, "Temporal Chains");
             //Slowed and takes increased damage
             buffDefTracking = BuffBuilder(Color.magenta, false, Assets.trackingIcon, true, "Tracked");

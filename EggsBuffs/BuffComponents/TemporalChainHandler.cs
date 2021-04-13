@@ -109,8 +109,8 @@ namespace EggsBuffs.BuffComponents
             targetStateOnHurt = characterBody.gameObject.GetComponent<SetStateOnHurt>();
             if (targetStateOnHurt)
             {
-                targetStateOnHurt.SetStun(1.5f);
+                targetStateOnHurt.SetStun(2f);
             }
-            }
+        }
     }
 }
