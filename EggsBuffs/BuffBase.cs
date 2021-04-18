@@ -7,7 +7,7 @@ using System.Security;
 using System.Security.Permissions;
 using EggsBuffs.BuffComponents;
 using EggsBuffs.Properties;
-
+using R2API.Utils;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -16,6 +16,11 @@ namespace EggsBuffs
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.2")]
+    [R2APISubmoduleDependency(new string[]
+{
+    nameof(BuffAPI),
+    nameof(LanguageAPI)
+})]
     public class BuffsLoading : BaseUnityPlugin
     {
         public static BuffDef buffDefTemporalChains;
