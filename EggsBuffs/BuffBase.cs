@@ -2,23 +2,26 @@
 using RoR2;
 using UnityEngine;
 using BepInEx;
-using EnigmaticThunder.Modules;
+using R2API;
 using System.Security;
 using System.Security.Permissions;
 using EggsBuffs.BuffComponents;
 using EggsBuffs.Properties;
+
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace EggsBuffs
 {
-    [BepInDependency("com.EnigmaDev.EnigmaticThunder", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.1")]
+    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.2")]
     public class BuffsLoading : BaseUnityPlugin
     {
         public static BuffDef buffDefTemporalChains;
         public static BuffDef buffDefTracking;
+        public static BuffDef buffDefAdaptive;
+        public static BuffDef buffDefUndying;
 
         public static float temporalOnHitIndex = 0.0001f;
         public static float trackingOnHitIndex = 0.0002f;
@@ -32,9 +35,19 @@ namespace EggsBuffs
             buffDefTemporalChains = BuffBuilder(Color.blue,true, Assets.placeHolderIcon, true, "Temporal Chains");
             //Slowed and takes increased damage
             buffDefTracking = BuffBuilder(Color.magenta, false, Assets.trackingIcon, true, "Tracked");
+            //Incoming damage capped
+            buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.placeHolderIcon, false, "Adaptive Armor");
+            //Cannot die
+            buffDefUndying = BuffBuilder(Color.red, false, Assets.placeHolderIcon, false, "Undying");
 
-            Buffs.RegisterBuff(buffDefTemporalChains);
-            Buffs.RegisterBuff(buffDefTracking);
+            CustomBuff buffTemporal = new CustomBuff(buffDefTemporalChains);
+            BuffAPI.Add(buffTemporal);
+            CustomBuff buffTracking = new CustomBuff(buffDefTracking);
+            BuffAPI.Add(buffTracking);
+            CustomBuff buffAdaptive = new CustomBuff(buffDefAdaptive);
+            BuffAPI.Add(buffAdaptive);
+            CustomBuff buffUndying = new CustomBuff(buffDefUndying);
+            BuffAPI.Add(buffUndying);
             BuffHooks();
             RegisterTokens();
         }
@@ -90,7 +103,23 @@ namespace EggsBuffs
                 {
                     damageInfo.damage *= 1.5f;
                 }
-
+                //Adaptive Buff Handler
+                if(self.body.HasBuff(buffDefAdaptive))
+                {
+                    float healthFraction = self.fullCombinedHealth / 5;
+                    if (damageInfo.damage > healthFraction)
+                    {
+                        damageInfo.damage = healthFraction;
+                    }
+                }
+                if(self.body.HasBuff(buffDefUndying))
+                {
+                    float health = self.health;
+                    if(damageInfo.damage >= health)
+                    {
+                        damageInfo.damage = health - 1;
+                    }
+                }
                 //Damagetype handler
                 if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                 {
@@ -122,8 +151,9 @@ namespace EggsBuffs
 
         private void RegisterTokens()
         {
-            Languages.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
-            Languages.Add("KEYWORD_STASIS", "<style=cKeywordName>Stasis</style><style=cSub>Units in stasis are invulnerable but cannot act</style>");
+            LanguageAPI.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
+            LanguageAPI.Add("KEYWORD_STASIS", "<style=cKeywordName>Stasis</style><style=cSub>Units in stasis are invulnerable but cannot act</style>");
+            LanguageAPI.Add("KEYWORD_ADAPTIVE", "<style=cKeywordName>Adaptive Defense</style><style=cSub>Incoming instances of damage are limited to 20% of max health</style>");
         }
         public static float ReturnProcToNormal(float procCoeff)
         {
