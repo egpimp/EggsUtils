@@ -15,7 +15,7 @@ using R2API.Utils;
 namespace EggsBuffs
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.2")]
+    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.3")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(BuffAPI),
