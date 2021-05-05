@@ -15,7 +15,7 @@ using R2API.Utils;
 namespace EggsBuffs
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.3")]
+    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.4")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(BuffAPI),
@@ -27,6 +27,7 @@ namespace EggsBuffs
         public static BuffDef buffDefTracking;
         public static BuffDef buffDefAdaptive;
         public static BuffDef buffDefUndying;
+        public static BuffDef buffDefCunning;
 
         public static float temporalOnHitIndex = 0.0001f;
         public static float trackingOnHitIndex = 0.0002f;
@@ -44,6 +45,8 @@ namespace EggsBuffs
             buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.placeHolderIcon, false, "Adaptive Armor");
             //Cannot die
             buffDefUndying = BuffBuilder(Color.red, false, Assets.placeHolderIcon, false, "Undying");
+            //Deal more damage + Move speed
+            buffDefCunning = BuffBuilder(Color.green, false, Assets.trackingIcon, false, "Cunning");
 
             CustomBuff buffTemporal = new CustomBuff(buffDefTemporalChains);
             BuffAPI.Add(buffTemporal);
@@ -53,8 +56,11 @@ namespace EggsBuffs
             BuffAPI.Add(buffAdaptive);
             CustomBuff buffUndying = new CustomBuff(buffDefUndying);
             BuffAPI.Add(buffUndying);
+            CustomBuff buffCunning = new CustomBuff(buffDefCunning);
+            BuffAPI.Add(buffCunning);
+
             BuffHooks();
-            RegisterTokens();
+            Assets.RegisterTokens();
         }
         public BuffDef BuffBuilder(Color color, bool canStack, Sprite icon, bool isDebuff, string buffName)
         {
@@ -96,6 +102,12 @@ namespace EggsBuffs
                 {
                     self.moveSpeed /= 2;
                 }
+
+                //Handle cunning buff effects
+                if(self.HasBuff(buffDefCunning))
+                {
+                    self.moveSpeed *= 1.25f;
+                }
             }
         }
         //If you're reading this, put me out of my misery why is custom damagetype shit so fucked
@@ -108,6 +120,7 @@ namespace EggsBuffs
                 {
                     damageInfo.damage *= 1.5f;
                 }
+
                 //Adaptive Buff Handler
                 if(self.body.HasBuff(buffDefAdaptive))
                 {
@@ -117,6 +130,8 @@ namespace EggsBuffs
                         damageInfo.damage = healthFraction;
                     }
                 }
+
+                //Undying Buff Handler
                 if(self.body.HasBuff(buffDefUndying))
                 {
                     float health = self.health;
@@ -125,6 +140,18 @@ namespace EggsBuffs
                         damageInfo.damage = health - 1;
                     }
                 }
+
+                //Cunning Buff Handler
+                {
+                    if (damageInfo.attacker)
+                    {
+                        if (damageInfo.attacker.GetComponent<CharacterBody>().HasBuff(buffDefCunning))
+                        {
+                            damageInfo.damage *= 1.75f;
+                        }
+                    }
+                }
+                        
                 //Damagetype handler
                 if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                 {
@@ -154,12 +181,6 @@ namespace EggsBuffs
             orig(self,damageInfo);
         }
 
-        private void RegisterTokens()
-        {
-            LanguageAPI.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
-            LanguageAPI.Add("KEYWORD_STASIS", "<style=cKeywordName>Stasis</style><style=cSub>Units in stasis are invulnerable but cannot act</style>");
-            LanguageAPI.Add("KEYWORD_ADAPTIVE", "<style=cKeywordName>Adaptive Defense</style><style=cSub>Incoming instances of damage are limited to 20% of max health</style>");
-        }
         public static float ReturnProcToNormal(float procCoeff)
         {
             var intProc = procCoeff * 10f;
