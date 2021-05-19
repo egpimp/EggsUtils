@@ -15,7 +15,7 @@ using R2API.Utils;
 namespace EggsBuffs
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.4")]
+    [BepInPlugin("com.Egg.EggsBuffs", "EggsBuffs", "1.0.5")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(BuffAPI),
@@ -141,21 +141,19 @@ namespace EggsBuffs
                     }
                 }
 
-                //Cunning Buff Handler
+                //Damagetype Handlers
+                if (damageInfo.attacker != null && damageInfo.inflictor != null)
                 {
-                    if (damageInfo.attacker)
+                    //Cunning Buff Handler
                     {
                         if (damageInfo.attacker.GetComponent<CharacterBody>().HasBuff(buffDefCunning))
                         {
                             damageInfo.damage *= 1.75f;
                         }
                     }
-                }
-                        
-                //Damagetype handler
-                if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
-                {
-                    if (damageInfo.inflictor != null && damageInfo.attacker != null)
+
+                    //Damagetype handler
+                    if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                     {
                         float retrieveIndexFromCoeff = ProcToDamageTypeDecoder(damageInfo.procCoefficient);
                         float fixCoeff = ReturnProcToNormal(damageInfo.procCoefficient);
