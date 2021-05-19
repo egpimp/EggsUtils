@@ -155,26 +155,29 @@ namespace EggsBuffs
                 //Damagetype handler
                 if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                 {
-                    float retrieveIndexFromCoeff = ProcToDamageTypeDecoder(damageInfo.procCoefficient);
-                    float fixCoeff = ReturnProcToNormal(damageInfo.procCoefficient);
-                    damageInfo.procCoefficient = fixCoeff;
-                    float flattenIndexForCheck = Convert.ToSingle(Math.Floor(retrieveIndexFromCoeff * 10000f));
-                    if (flattenIndexForCheck == temporalOnHitCompare)
+                    if (damageInfo.inflictor != null && damageInfo.attacker != null)
                     {
-                        TemporalChainHandler chainHandler = self.body.gameObject.GetComponent<TemporalChainHandler>();
-                        if (!chainHandler)
+                        float retrieveIndexFromCoeff = ProcToDamageTypeDecoder(damageInfo.procCoefficient);
+                        float fixCoeff = ReturnProcToNormal(damageInfo.procCoefficient);
+                        damageInfo.procCoefficient = fixCoeff;
+                        float flattenIndexForCheck = Convert.ToSingle(Math.Floor(retrieveIndexFromCoeff * 10000f));
+                        if (flattenIndexForCheck == temporalOnHitCompare)
                         {
-                            chainHandler = self.body.gameObject.AddComponent<TemporalChainHandler>();
+                            TemporalChainHandler chainHandler = self.body.gameObject.GetComponent<TemporalChainHandler>();
+                            if (!chainHandler)
+                            {
+                                chainHandler = self.body.gameObject.AddComponent<TemporalChainHandler>();
+                            }
+                            self.body.AddBuff(buffDefTemporalChains);
+                            chainHandler.inflictor = damageInfo.attacker;
+                            chainHandler.ResetTimer();
+                            damageInfo.damageType = DamageType.Generic;
                         }
-                        self.body.AddBuff(buffDefTemporalChains);
-                        chainHandler.inflictor = damageInfo.attacker;
-                        chainHandler.ResetTimer();
-                        damageInfo.damageType = DamageType.Generic;
-                    }
-                    else if(flattenIndexForCheck == trackingOnHitCompare)
-                    {
-                        self.body.AddTimedBuff(buffDefTracking,5f);
-                        damageInfo.damageType = DamageType.Generic;
+                        else if (flattenIndexForCheck == trackingOnHitCompare)
+                        {
+                            self.body.AddTimedBuff(buffDefTracking, 5f);
+                            damageInfo.damageType = DamageType.Generic;
+                        }
                     }
                 }
             }
