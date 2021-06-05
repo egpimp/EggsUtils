@@ -109,14 +109,21 @@ namespace EggsUtils
                     float retrieveIndexFromCoeff = BuffsLoading.ProcToDamageTypeDecoder(damageInfo.procCoefficient);
                     float fixCoeff = BuffsLoading.ReturnProcToNormal(damageInfo.procCoefficient);
                     damageInfo.procCoefficient = fixCoeff;
-                    float flattenIndexForCheck = Convert.ToSingle(Math.Floor(retrieveIndexFromCoeff * 10000f));
+                    int flattenIndexForCheck = Convert.ToInt32(Math.Floor(retrieveIndexFromCoeff * 10000f));
                     if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                     {
                         foreach (BuffsLoading.CustomDamageType damageType in BuffsLoading.damageTypesList)
                         {
                             if (damageType.buffDef != null && damageType.onHitIndex == flattenIndexForCheck)
                             {
-                                self.body.AddBuff(damageType.buffDef);
+                                if (damageType.buffDuration > 0)
+                                {
+                                    self.body.AddTimedBuff(damageType.buffDef, damageType.buffDuration);
+                                }
+                                else
+                                {
+                                    self.body.AddBuff(damageType.buffDef);
+                                }
                                 damageInfo.damageType = DamageType.Generic;
                                 damageInfo.procCoefficient = fixCoeff;
                             }
@@ -124,6 +131,7 @@ namespace EggsUtils
                             {
                                 damageInfo = damageType.callOnHit.Invoke(self, damageInfo);
                                 damageInfo.damageType = DamageType.Generic;
+                                damageInfo.procCoefficient = fixCoeff;
                             }
                         }
                     }

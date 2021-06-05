@@ -4,12 +4,15 @@ using UnityEngine;
 using EggsUtils.Buffs.BuffComponents;
 using EggsUtils.Properties;
 using System.Collections.Generic;
+using R2API;
 
 namespace EggsUtils.Buffs
 {
     public class BuffsLoading
     {
         public static List<CustomDamageType> damageTypesList = new List<CustomDamageType>();
+
+        private static List<BuffDef> defList = new List<BuffDef>();
 
         public static BuffDef buffDefTemporalChains;
         public static BuffDef buffDefTracking;
@@ -23,30 +26,43 @@ namespace EggsUtils.Buffs
         {
             //Stacking slow.  At 8 stacks instead take a burst of damage, stun for two seconds, and reset stacks
             buffDefTemporalChains = BuffBuilder(Color.blue, true, Assets.placeHolderIcon, true, "Temporal Chains");
-            temporalChainsOnHit = AssignNewDamageType(buffDefTemporalChains, TemporalChainHandler);
+            temporalChainsOnHit = AssignNewDamageType(buffDefTemporalChains, 0f, TemporalChainHandler);
+            defList.Add(buffDefTemporalChains);
             //Slowed and takes increased damage
             buffDefTracking = BuffBuilder(Color.magenta, false, Assets.trackingIcon, true, "Tracked");
-            trackingOnHit = AssignNewDamageType(buffDefTracking);
+            trackingOnHit = AssignNewDamageType(buffDefTracking, 5f);
+            defList.Add(buffDefTracking);
             //Incoming damage capped
             buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.placeHolderIcon, false, "Adaptive Armor");
+            defList.Add(buffDefAdaptive);
             //Cannot die
             buffDefUndying = BuffBuilder(Color.red, false, Assets.placeHolderIcon, false, "Undying");
+            defList.Add(buffDefUndying);
             //Deal more damage + Move speed
             buffDefCunning = BuffBuilder(Color.green, false, Assets.trackingIcon, false, "Cunning");
+            defList.Add(buffDefCunning);
+
+            foreach(BuffDef def in defList)
+            {
+                CustomBuff buff = new CustomBuff(def);
+                BuffAPI.Add(buff);
+            }
         }
         public struct CustomDamageType
         {
             public BuffDef buffDef { get; private set; }
             public int onHitIndex { get; private set; }
             public float procIndex { get; private set; }
+            public float buffDuration { get; private set; }
             public Func<HealthComponent, DamageInfo, DamageInfo> callOnHit { get; private set; }
 
-            public CustomDamageType(BuffDef buff, int index)
+            public CustomDamageType(BuffDef buff, float duration, int index)
             {
                 buffDef = buff;
                 onHitIndex = index;
                 procIndex = Convert.ToSingle(Math.Round(index / 10000f, 4));
                 callOnHit = null;
+                buffDuration = duration;
             }
             public CustomDamageType(Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
             {
@@ -54,29 +70,31 @@ namespace EggsUtils.Buffs
                 onHitIndex = index;
                 procIndex = Convert.ToSingle(Math.Round(index / 10000f, 4));
                 callOnHit = call;
+                buffDuration = 0;
             }
-            public CustomDamageType(BuffDef buff, Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
+            public CustomDamageType(BuffDef buff, float duration, Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
             {
                 buffDef = buff;
                 onHitIndex = index;
                 procIndex = Convert.ToSingle(Math.Round(index / 10000f, 4));
                 callOnHit = call;
+                buffDuration = duration;
             }
         }
         /// <summary>
-        /// Sets up a custom damagetype that applies the given buffdef
+        /// Sets up a custom damagetype that applies the given buffdef for the given duration.  If the duration is 0, it is applied indefinitely.
         /// </summary>
         /// <param name="buffToApply"></param>
         /// <returns></returns>
-        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply)
+        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration)
         {
             int index = damageTypesList.Count + 1;
-            CustomDamageType onHit = new CustomDamageType(buffToApply, index) { };
+            CustomDamageType onHit = new CustomDamageType(buffToApply, duration, index) { };
             damageTypesList.Add(onHit);
             return onHit;
         }
         /// <summary>
-        /// Sets up a custom damagetype that invokes the given method
+        /// Sets up a custom damagetype that invokes the given method.
         /// </summary>
         /// <param name="call"></param>
         /// <returns></returns>
@@ -88,15 +106,15 @@ namespace EggsUtils.Buffs
             return onHit;
         }
         /// <summary>
-        /// Sets up a custom damagetype that invokes the given method and applies the given buff
+        /// Sets up a custom damagetype that invokes the given method and applies the given buff for the given duration.  If the duration is 0 it is applied indefinitely.
         /// </summary>
         /// <param name="buffToApply"></param>
         /// <param name="call"></param>
         /// <returns></returns>
-        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply, Func<HealthComponent, DamageInfo, DamageInfo> method)
+        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration, Func<HealthComponent, DamageInfo, DamageInfo> method)
         {
             int index = damageTypesList.Count + 1;
-            CustomDamageType onHit = new CustomDamageType(buffToApply, method, index) { };
+            CustomDamageType onHit = new CustomDamageType(buffToApply, duration, method, index) { };
             damageTypesList.Add(onHit);
             return onHit;
         }
