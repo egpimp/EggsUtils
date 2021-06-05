@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using RoR2;
 
-namespace EggsBuffs.BuffComponents
+namespace EggsUtils.Buffs.BuffComponents
 {
     [RequireComponent(typeof(CharacterBody))]
     class TemporalChainHandler : MonoBehaviour

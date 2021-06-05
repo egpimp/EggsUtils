@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using R2API;
 
-namespace EggsBuffs.Properties
+namespace EggsUtils.Properties
 {
     public static class Assets
     {
-        internal static Sprite trackingIcon = Resources.Load<Sprite>("Textures/BuffIcons/texBuffFullCritIcon");
-        internal static Sprite placeHolderIcon = Resources.Load<Sprite>("Textures/BuffIcons/texBuffPulverizeIcon");
+        internal static Sprite trackingIcon = UnityEngine.Resources.Load<Sprite>("Textures/BuffIcons/texBuffFullCritIcon");
+        internal static Sprite placeHolderIcon = UnityEngine.Resources.Load<Sprite>("Textures/BuffIcons/texBuffPulverizeIcon");
         internal static void RegisterTokens()
         {
             LanguageAPI.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
