@@ -8,6 +8,7 @@ using System.Security;
 using System.Security.Permissions;
 using EggsUtils.Properties;
 using System;
+using UnityEngine;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -15,13 +16,13 @@ using System;
 namespace EggsUtils
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsUtil", "EggsUtil", "1.0.6")]
+    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.0.0")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(BuffAPI),
     nameof(LanguageAPI)
 })]
-    internal class EggsUtils : BaseUnityPlugin
+    public class EggsUtils : BaseUnityPlugin
     {
         private void Awake()
         {
@@ -29,6 +30,11 @@ namespace EggsUtils
             Assets.RegisterTokens();
             BuffHooks();
         }
+        public static void LogToConsole(string logText)
+        {
+            Debug.Log("EggsSkills : " + logText);
+        }
+
         private void BuffHooks()
         {
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
@@ -97,6 +103,7 @@ namespace EggsUtils
 
                 if (damageInfo.attacker != null && damageInfo.inflictor != null)
                 {
+                    CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
                     //Cunning Buff Handler
                     {
                         if (damageInfo.attacker.GetComponent<CharacterBody>().HasBuff(BuffsLoading.buffDefCunning))
@@ -124,13 +131,13 @@ namespace EggsUtils
                                 {
                                     self.body.AddBuff(damageType.buffDef);
                                 }
-                                damageInfo.damageType = DamageType.Generic;
+                                damageInfo.damageType ^= DamageType.NonLethal;
                                 damageInfo.procCoefficient = fixCoeff;
                             }
                             if (damageType.callOnHit != null && damageType.onHitIndex == flattenIndexForCheck)
                             {
                                 damageInfo = damageType.callOnHit.Invoke(self, damageInfo);
-                                damageInfo.damageType = DamageType.Generic;
+                                damageInfo.damageType ^= DamageType.NonLethal;
                                 damageInfo.procCoefficient = fixCoeff;
                             }
                         }

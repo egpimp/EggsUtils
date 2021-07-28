@@ -56,7 +56,7 @@ namespace EggsUtils.Buffs
             public float buffDuration { get; private set; }
             public Func<HealthComponent, DamageInfo, DamageInfo> callOnHit { get; private set; }
 
-            public CustomDamageType(BuffDef buff, float duration, int index)
+            internal CustomDamageType(BuffDef buff, float duration, int index)
             {
                 buffDef = buff;
                 onHitIndex = index;
@@ -64,7 +64,7 @@ namespace EggsUtils.Buffs
                 callOnHit = null;
                 buffDuration = duration;
             }
-            public CustomDamageType(Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
+            internal CustomDamageType(Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
             {
                 buffDef = null;
                 onHitIndex = index;
@@ -72,7 +72,7 @@ namespace EggsUtils.Buffs
                 callOnHit = call;
                 buffDuration = 0;
             }
-            public CustomDamageType(BuffDef buff, float duration, Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
+            internal CustomDamageType(BuffDef buff, float duration, Func<HealthComponent, DamageInfo, DamageInfo> call, int index)
             {
                 buffDef = buff;
                 onHitIndex = index;
@@ -86,7 +86,7 @@ namespace EggsUtils.Buffs
         /// </summary>
         /// <param name="buffToApply"></param>
         /// <returns></returns>
-        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration)
+        internal static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration)
         {
             int index = damageTypesList.Count + 1;
             CustomDamageType onHit = new CustomDamageType(buffToApply, duration, index) { };
@@ -98,7 +98,7 @@ namespace EggsUtils.Buffs
         /// </summary>
         /// <param name="call"></param>
         /// <returns></returns>
-        public static CustomDamageType AssignNewDamageType(Func<HealthComponent, DamageInfo, DamageInfo> method)
+        private static CustomDamageType AssignNewDamageType(Func<HealthComponent, DamageInfo, DamageInfo> method)
         {
             int index = damageTypesList.Count + 1;
             CustomDamageType onHit = new CustomDamageType(method, index) { };
@@ -111,7 +111,7 @@ namespace EggsUtils.Buffs
         /// <param name="buffToApply"></param>
         /// <param name="call"></param>
         /// <returns></returns>
-        public static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration, Func<HealthComponent, DamageInfo, DamageInfo> method)
+        private static CustomDamageType AssignNewDamageType(BuffDef buffToApply, float duration, Func<HealthComponent, DamageInfo, DamageInfo> method)
         {
             int index = damageTypesList.Count + 1;
             CustomDamageType onHit = new CustomDamageType(buffToApply, duration, method, index) { };
@@ -127,7 +127,7 @@ namespace EggsUtils.Buffs
         /// <param name="isDebuff"></param>
         /// <param name="buffName"></param>
         /// <returns></returns>
-        public static BuffDef BuffBuilder(Color color, bool canStack, Sprite icon, bool isDebuff, string buffName)
+        private static BuffDef BuffBuilder(Color color, bool canStack, Sprite icon, bool isDebuff, string buffName)
         {
             var buffDef = ScriptableObject.CreateInstance<BuffDef>();
             buffDef.name = buffName;
