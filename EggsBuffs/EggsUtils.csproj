@@ -27,8 +27,20 @@
     <Reference Include="BepInEx.Preloader">
       <HintPath>..\libs\BepInEx.Preloader.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
+      <HintPath>..\libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Decalicious">
+      <HintPath>..\libs\Decalicious.dll</HintPath>
+    </Reference>
+    <Reference Include="EOS">
+      <HintPath>..\libs\EOS.dll</HintPath>
+    </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\libs\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
+    <Reference Include="GenericIK">
+      <HintPath>..\libs\GenericIK.dll</HintPath>
     </Reference>
     <Reference Include="HarmonyXInterop">
       <HintPath>..\libs\HarmonyXInterop.dll</HintPath>
@@ -41,6 +53,12 @@
     </Reference>
     <Reference Include="KdTreeLib">
       <HintPath>..\libs\KdTreeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="KinematicCharacterController">
+      <HintPath>..\libs\KinematicCharacterController.dll</HintPath>
+    </Reference>
+    <Reference Include="LegacyResourcesAPI">
+      <HintPath>..\libs\LegacyResourcesAPI.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>..\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
@@ -69,6 +87,9 @@
     <Reference Include="MonoMod.Utils">
       <HintPath>..\libs\MonoMod.Utils.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="pb_Stl">
       <HintPath>..\libs\pb_Stl.dll</HintPath>
     </Reference>
@@ -90,8 +111,14 @@
     <Reference Include="Rewired_CSharp">
       <HintPath>..\libs\Rewired_CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Rewired_Windows">
+      <HintPath>..\libs\Rewired_Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Rewired_Windows_Lib">
       <HintPath>..\libs\Rewired_Windows_Lib.dll</HintPath>
+    </Reference>
+    <Reference Include="RoR2">
+      <HintPath>..\libs\RoR2.dll</HintPath>
     </Reference>
     <Reference Include="SimpleJSON">
       <HintPath>..\libs\SimpleJSON.dll</HintPath>
@@ -114,8 +141,26 @@
     <Reference Include="System.Xml.XPath.XDocument">
       <HintPath>..\libs\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>..\libs\Unity.Addressables.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>..\libs\Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>..\libs\Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Csg">
+      <HintPath>..\libs\Unity.ProBuilder.Csg.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.KdTree">
+      <HintPath>..\libs\Unity.ProBuilder.KdTree.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Poly2Tri">
+      <HintPath>..\libs\Unity.ProBuilder.Poly2Tri.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Stl">
+      <HintPath>..\libs\Unity.ProBuilder.Stl.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>..\libs\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
@@ -123,8 +168,17 @@
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>..\libs\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>..\libs\Unity.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>..\libs\Unity.ScriptableBuildPipeline.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\libs\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>..\libs\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\libs\UnityEngine.dll</HintPath>
@@ -134,6 +188,9 @@
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>..\libs\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AndroidJNIModule">
+      <HintPath>..\libs\UnityEngine.AndroidJNIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
       <HintPath>..\libs\UnityEngine.AnimationModule.dll</HintPath>
@@ -168,6 +225,9 @@
     <Reference Include="UnityEngine.DirectorModule">
       <HintPath>..\libs\UnityEngine.DirectorModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.DSPGraphModule">
+      <HintPath>..\libs\UnityEngine.DSPGraphModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.FileSystemHttpModule">
       <HintPath>..\libs\UnityEngine.FileSystemHttpModule.dll</HintPath>
     </Reference>
@@ -185,6 +245,9 @@
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\libs\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\libs\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\libs\UnityEngine.InputModule.dll</HintPath>
@@ -236,6 +299,9 @@
     </Reference>
     <Reference Include="UnityEngine.SubstanceModule">
       <HintPath>..\libs\UnityEngine.SubstanceModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SubsystemsModule">
+      <HintPath>..\libs\UnityEngine.SubsystemsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TerrainModule">
       <HintPath>..\libs\UnityEngine.TerrainModule.dll</HintPath>
@@ -315,6 +381,9 @@
     <Reference Include="UnityEngine.WindModule">
       <HintPath>..\libs\UnityEngine.WindModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.XR.LegacyInputHelpers">
+      <HintPath>..\libs\UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>..\libs\UnityEngine.XRModule.dll</HintPath>
     </Reference>
@@ -344,5 +413,15 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;C:\Users\Eav\source\repos\Eggs Skills\libs&quot;&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;E:\Program files\steamapps\common\Risk of Rain 2\BepInEx\plugins&quot;" />
   </Target>
+
+	<ItemGroup>
+		<PackageReference Include="BepInEx.Analyzers" Version="1.0.*">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="BepInEx.Core" Version="5.4.19" />
+		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.2.1-r.0" />
+		<PackageReference Include="UnityEngine.Modules" Version="2019.4.26" />
+	</ItemGroup>
 
 </Project>
