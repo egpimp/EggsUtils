@@ -36,7 +36,7 @@ namespace EggsUtils.Buffs
             defList.Add(buffDefTemporalChains);
 
             //Slowed and takes increased damage
-            buffDefTracking = BuffBuilder(Color.magenta, false, Assets.trackingIcon, true, "Tracked");
+            buffDefTracking = BuffBuilder(Color.magenta, false, LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texMovespeedBuffIcon"), true, "Tracked");
             trackingOnHit = AssignNewDamageType(buffDefTracking, 5f);
             defList.Add(buffDefTracking);
 

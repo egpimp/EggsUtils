@@ -3,21 +3,34 @@ using R2API;
 using System;
 using Mono.Cecil;
 using RoR2;
+using UnityEngine.AddressableAssets;
 
 namespace EggsUtils.Properties
 {
     public static class Assets
     {
-        //Nab the icons, we are just using existing icons cause I don't feel like making any custom ones just yet
-        internal static Sprite trackingIcon = LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffFullCritIcon");
-        internal static Sprite placeHolderIcon = LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffPulverizeIcon");
-        internal static void RegisterTokens()
+        internal static Sprite trackingIcon;
+        internal static Sprite placeHolderIcon;
+
+        internal static void RegisterAssets()
+        {
+            RegisterTokens();
+            EggsUtils.LogToConsole("Tokens registered");
+            RegisterSprites();
+            EggsUtils.LogToConsole("Buff Icons registered");
+        }
+
+        private static void RegisterSprites()
+        {
+
+        }
+
+        private static void RegisterTokens()
         {
             //Establish all the keyword tokens
             LanguageAPI.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
             LanguageAPI.Add("KEYWORD_STASIS", "<style=cKeywordName>Stasis</style><style=cSub>Units in stasis are invulnerable but cannot act</style>");
             LanguageAPI.Add("KEYWORD_ADAPTIVE", "<style=cKeywordName>Adaptive</style><style=cSub>Incoming instances of damage are limited to 20% of max health</style>");
-            LanguageAPI.Add("KEYWORD_LUCKY", "<style=cKeywordName>Lucky</style><style=cSub>Rerolls all random effects x times for a favorable outcome</style>");
             LanguageAPI.Add("KEYWORD_PREPARE", "<style=cKeywordName>Prepare</style><style=cSub>Refreshes a stock of an ability</style>");
         }
 

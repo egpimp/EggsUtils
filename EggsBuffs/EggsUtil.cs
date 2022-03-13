@@ -16,7 +16,7 @@ using UnityEngine;
 namespace EggsUtils
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.1.0")]
+    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.1.1")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(LanguageAPI)
@@ -25,10 +25,10 @@ namespace EggsUtils
     {
         private void Awake()
         {
+            //Register the lang tokens
+            Assets.RegisterAssets();
             //Prep the buffs first
             BuffsLoading.SetupBuffs();
-            //Register the lang tokens
-            Assets.RegisterTokens();
             //Rev up those hooks
             BuffHooks();
         }
