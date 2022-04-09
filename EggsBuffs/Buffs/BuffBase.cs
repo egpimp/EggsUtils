@@ -31,25 +31,25 @@ namespace EggsUtils.Buffs
         internal static void SetupBuffs()
         {
             //Stacking slow.  At 8 stacks instead take a burst of damage, stun for two seconds, and reset stacks
-            buffDefTemporalChains = BuffBuilder(Color.blue, true, Assets.placeHolderIcon, true, "Temporal Chains");
+            buffDefTemporalChains = BuffBuilder(Color.blue, true, Assets.doesNotExist, true, "Temporal Chains");
             temporalChainsOnHit = AssignNewDamageType(buffDefTemporalChains, 0f, TemporalChainHandler);
             defList.Add(buffDefTemporalChains);
 
             //Slowed and takes increased damage
-            buffDefTracking = BuffBuilder(Color.magenta, false, LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texMovespeedBuffIcon"), true, "Tracked");
+            buffDefTracking = BuffBuilder(Color.magenta, false, Assets.doesNotExist, true, "Tracked");
             trackingOnHit = AssignNewDamageType(buffDefTracking, 5f);
             defList.Add(buffDefTracking);
 
             //Incoming damage capped
-            buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.placeHolderIcon, false, "Adaptive Armor");
+            buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.doesNotExist, false, "Adaptive Armor");
             defList.Add(buffDefAdaptive);
 
             //Cannot die
-            buffDefUndying = BuffBuilder(Color.red, false, Assets.placeHolderIcon, false, "Undying");
+            buffDefUndying = BuffBuilder(Color.red, false, Assets.doesNotExist, false, "Undying");
             defList.Add(buffDefUndying);
 
             //Deal more damage + Move speed
-            buffDefCunning = BuffBuilder(Color.blue, false, Assets.trackingIcon, false, "Cunning");
+            buffDefCunning = BuffBuilder(Color.blue, false, Assets.doesNotExist, false, "Cunning");
             defList.Add(buffDefCunning);
 
             //Adds all the buffs via R2API (Thanks r2api devs)

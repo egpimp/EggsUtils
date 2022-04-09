@@ -16,7 +16,7 @@ using UnityEngine;
 namespace EggsUtils
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.1.1")]
+    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.1.2")]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(LanguageAPI)
@@ -25,10 +25,10 @@ namespace EggsUtils
     {
         private void Awake()
         {
-            //Register the lang tokens
-            Assets.RegisterAssets();
             //Prep the buffs first
             BuffsLoading.SetupBuffs();
+            //Register the assets
+            Assets.RegisterAssets();
             //Rev up those hooks
             BuffHooks();
         }
@@ -84,25 +84,34 @@ namespace EggsUtils
             //Again no null pls thanks
             if (self)
             {
+                //Nab armor multiplier
+                float armorMult = 1f - self.body.armor / (100f + Mathf.Abs(self.body.armor));
+                //Nab net damage (After armor)
+                float netDamage = damageInfo.damage * armorMult;
                 //Tracking Debuff Handler, just increase incoming damage if person taking damage has tracking 'buff'
                 if (self.body.HasBuff(BuffsLoading.buffDefTracking)) damageInfo.damage *= 1.5f;
 
                 //Adaptive Buff Handler
                 if (self.body.HasBuff(BuffsLoading.buffDefAdaptive))
                 {
+                    //Authors note: I previously forgot to factor in armor lol
+
                     //This should get us 20% of their max health
                     float healthFraction = self.fullCombinedHealth / 5;
-                    //If the damage is greater than that 20%, set it to the 20% instead
-                    if (damageInfo.damage > healthFraction) damageInfo.damage = healthFraction;
+                    //If the net damage is greater than that 20%, set it to the 20% instead
+                    //Formula newNetDamage = newDamage * armorMult, and we have newNet and armorMult, thus newDamage = newNet / armorMult
+                    if (netDamage > healthFraction) damageInfo.damage = healthFraction / armorMult;
+                    //Prolly shoulda done this sooner but we are cutting out knockback too, fuggit
+                    damageInfo.force = Vector3.zero;
                 }
 
                 //Undying Buff Handler
                 if (self.body.HasBuff(BuffsLoading.buffDefUndying))
                 {
-                    //This should jut be current health, no need to be based on max
+                    //This should just be current health, no need to be based on max
                     float health = self.health;
                     //If damage would kill, then reduce the damage to one shy of killing.  We don't mind taking damage, but dying is illegal with this buff.
-                    if (damageInfo.damage >= health) damageInfo.damage = health - 1;
+                    if (damageInfo.damage >= health) damageInfo.damage = (health - 1) / armorMult;
                 }
 
                 //This is set up for handling things dependent on an attacker existing
