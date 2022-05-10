@@ -15,14 +15,21 @@ using UnityEngine;
 
 namespace EggsUtils
 {
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("com.Egg.EggsUtils", "EggsUtils", "1.1.2")]
+    [BepInDependency(API_NAME, BepInDependency.DependencyFlags.HardDependency)]
+    [BepInPlugin(COMPAT_NAME, COMPAT_TITLE, COMPAT_VERS)]
     [R2APISubmoduleDependency(new string[]
 {
     nameof(LanguageAPI)
 })]
     public class EggsUtils : BaseUnityPlugin
     {
+        //Mod strings
+        public const string COMPAT_NAME = "com.Egg.EggsUtils";
+        public const string COMPAT_TITLE = "EggsUtils";
+        public const string COMPAT_VERS = "1.2.0";
+        //Hard Dependancies
+        public const string API_NAME = "com.bepis.r2api";
+
         private void Awake()
         {
             //Prep the buffs first
