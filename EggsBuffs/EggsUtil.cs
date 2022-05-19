@@ -93,10 +93,19 @@ namespace EggsUtils
             {
                 //Nab armor multiplier
                 float armorMult = 1f - self.body.armor / (100f + Mathf.Abs(self.body.armor));
-                //Nab net damage (After armor)
-                float netDamage = damageInfo.damage * armorMult;
                 //Tracking Debuff Handler, just increase incoming damage if person taking damage has tracking 'buff'
                 if (self.body.HasBuff(BuffsLoading.buffDefTracking)) damageInfo.damage *= 1.5f;
+                //Damagestackbuff handler
+                if(self.body.HasBuff(BuffsLoading.buffDefStackingDamage))
+                {
+                    //Get net damage multiplier
+                    float damageMult = 1 + 0.1f * self.body.GetBuffCount(BuffsLoading.buffDefStackingDamage);
+                    //Get damage after multiplying
+                    damageInfo.damage *= damageMult;
+                }
+
+                //Nab net damage (After armor and other damage multipliers)
+                float netDamage = damageInfo.damage * armorMult;
 
                 //Adaptive Buff Handler
                 if (self.body.HasBuff(BuffsLoading.buffDefAdaptive))

@@ -16,6 +16,7 @@ namespace EggsUtils.Buffs
         public static BuffDef buffDefAdaptive;
         public static BuffDef buffDefUndying;
         public static BuffDef buffDefCunning;
+        public static BuffDef buffDefStackingDamage;
 
         //Applies temporal chains on hit
         public static CustomDamageType temporalChainsOnHit;
@@ -51,6 +52,10 @@ namespace EggsUtils.Buffs
             //Deal more damage + Move speed
             buffDefCunning = BuffBuilder(Color.blue, false, Assets.doesNotExist, false, "Cunning");
             defList.Add(buffDefCunning);
+
+            //+Damage per stack
+            buffDefStackingDamage = BuffBuilder(Color.red, false, Assets.doesNotExist, false, "StackingDamage");
+            defList.Add(buffDefStackingDamage);
 
             //Adds all the buffs via R2API (Thanks r2api devs)
             foreach(BuffDef def in defList) AddBuffDef(def);
