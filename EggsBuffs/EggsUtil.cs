@@ -1,13 +1,11 @@
 ﻿using BepInEx;
 using EggsUtils.Buffs;
-using R2API;
-using R2API.Utils;
-using RoR2;
 using EggsUtils.Buffs.BuffComponents;
+using EggsUtils.Properties;
+using RoR2;
+using System;
 using System.Security;
 using System.Security.Permissions;
-using EggsUtils.Properties;
-using System;
 using UnityEngine;
 
 [module: UnverifiableCode]
@@ -17,32 +15,25 @@ namespace EggsUtils
 {
     [BepInDependency(API_NAME, BepInDependency.DependencyFlags.HardDependency)]
     [BepInPlugin(COMPAT_NAME, COMPAT_TITLE, COMPAT_VERS)]
-    [R2APISubmoduleDependency(new string[]
-{
-    nameof(LanguageAPI)
-})]
     public class EggsUtils : BaseUnityPlugin
     {
         //Mod strings
         public const string COMPAT_NAME = "com.Egg.EggsUtils";
         public const string COMPAT_TITLE = "EggsUtils";
-        public const string COMPAT_VERS = "1.2.0";
+        public const string COMPAT_VERS = "1.2.8";
         //Hard Dependancies
         public const string API_NAME = "com.bepis.r2api";
 
         private void Awake()
         {
+            //Logger init
+            Log.Init(Logger);
             //Prep the buffs first
             BuffsLoading.SetupBuffs();
             //Register the assets
-            Assets.RegisterAssets();
+            EggAssets.RegisterAssets();
             //Rev up those hooks
             BuffHooks();
-        }
-        //This helps us spot our own console logs in a potential mess of logs
-        public static void LogToConsole(string logText)
-        {
-            Debug.Log("EggsMods : " + logText);
         }
 
         //RecalculateStats and TakeDamage are the main two things that status effects will affect
@@ -68,7 +59,7 @@ namespace EggsUtils
                     //Declare component for reference
                     TemporalChainHandler chainHandler;
                     //Try to get component, if no exist create and assign it
-                    if (!self.gameObject.TryGetComponent<TemporalChainHandler>(out chainHandler)) chainHandler = self.gameObject.AddComponent<TemporalChainHandler>();
+                    if (!self.gameObject.TryGetComponent(out chainHandler)) chainHandler = self.gameObject.AddComponent<TemporalChainHandler>();
                     //Slowcount basically just says how many stacks of the buff exist
                     float slowCount = chainHandler.GetSlowcount();
                     //100% -> 50% movespeed based on stack count
@@ -88,21 +79,12 @@ namespace EggsUtils
         //Hook for all damage based buffs / debuffs
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            //Again no null pls thanks
-            if (self)
+            if (self && self.alive && self.body)
             {
                 //Nab armor multiplier
                 float armorMult = 1f - self.body.armor / (100f + Mathf.Abs(self.body.armor));
                 //Tracking Debuff Handler, just increase incoming damage if person taking damage has tracking 'buff'
                 if (self.body.HasBuff(BuffsLoading.buffDefTracking)) damageInfo.damage *= 1.5f;
-                //Damagestackbuff handler
-                if(self.body.HasBuff(BuffsLoading.buffDefStackingDamage))
-                {
-                    //Get net damage multiplier
-                    float damageMult = 1 + 0.1f * self.body.GetBuffCount(BuffsLoading.buffDefStackingDamage);
-                    //Get damage after multiplying
-                    damageInfo.damage *= damageMult;
-                }
 
                 //Nab net damage (After armor and other damage multipliers)
                 float netDamage = damageInfo.damage * armorMult;
@@ -131,13 +113,22 @@ namespace EggsUtils
                 }
 
                 //This is set up for handling things dependent on an attacker existing
-                if (damageInfo.attacker != null && damageInfo.inflictor != null)
+                if (damageInfo.attacker && damageInfo.inflictor)
                 {
                     //Grab the attackerbody once we know they exist, just helps referencing later
                     CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
 
                     //Cunning Buff Handler, if attacker has buff then multiply the damage, simple.
-                    if (damageInfo.attacker.GetComponent<CharacterBody>().HasBuff(BuffsLoading.buffDefCunning)) damageInfo.damage *= 1.75f;
+                    if (attackerBody && attackerBody.HasBuff(BuffsLoading.buffDefCunning)) damageInfo.damage *= 1.75f;
+
+                    //Damagestackbuff handler
+                    if (attackerBody && attackerBody.HasBuff(BuffsLoading.buffDefStackingDamage))
+                    {
+                        //Get net damage multiplier
+                        float damageMult = 1 + 0.1f * attackerBody.GetBuffCount(BuffsLoading.buffDefStackingDamage);
+                        //Get damage after multiplying
+                        damageInfo.damage *= damageMult;
+                    }
 
                     //Damagetype handler, welcome to the nightmare fiesta overdrive
                     //Ok so first off we nab the index from the proc coefficient, with proc coefficient x.xyyyy where x is the normal proc coefficient, we turn y into an index in range 0001-9999
@@ -147,13 +138,14 @@ namespace EggsUtils
                     //This makes the 'index' go from a weird decimal to a full on integer
                     int flattenIndexForCheck = Convert.ToInt32(Math.Floor(retrieveIndexFromCoeff * 10000f));
                     //Ok now we check if the damagetype is nonlethal, nonlethal is our flag for 'hey, this might be a custom damagetype'
-                    if ((damageInfo.damageType & DamageType.NonLethal) == DamageType.NonLethal)
+                    if ((damageInfo.damageType.damageType & DamageType.NonLethal) == DamageType.NonLethal)
                     {
                         //Loop through all our custom damagetypes to find if any of them match the index,
                         foreach (BuffsLoading.CustomDamageType damageType in BuffsLoading.damageTypesList)
                         {
+                            if (damageType.onHitIndex != flattenIndexForCheck) continue;
                             //If the damagetype has buffs or debuffs to apply...
-                            if (damageType.buffDef != null && damageType.onHitIndex == flattenIndexForCheck)
+                            if (damageType.buffDef)
                             {
                                 //If duration exists add for that duration
                                 if (damageType.buffDuration > 0) self.body.AddTimedBuff(damageType.buffDef, damageType.buffDuration);
@@ -163,12 +155,12 @@ namespace EggsUtils
                                 damageInfo.damageType ^= DamageType.NonLethal;
                             }
                             //If the damagetype has methods to call...
-                            if (damageType.callOnHit != null && damageType.onHitIndex == flattenIndexForCheck)
+                            if (damageType.callOnHit != null)
                             {
                                 //Invoke the method with the given info
                                 damageInfo = damageType.callOnHit.Invoke(self, damageInfo);
                                 //Once again, remove nonlethal damage
-                                damageInfo.damageType ^= DamageType.NonLethal;
+                                damageInfo.damageType.damageType ^= DamageType.NonLethal;
                             }
                         }
                     }

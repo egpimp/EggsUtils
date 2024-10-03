@@ -2,7 +2,7 @@
 
 namespace EggsUtils.Buffs.BuffStates
 {
-    class StasisState : BaseState
+    internal class StasisState : BaseState
     {
     }
 }

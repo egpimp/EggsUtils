@@ -1,0 +1,9 @@
+{
+	"strings":
+	{
+		"ES_KEYWORD_ENHANCING":"<style=cKeywordName>Overloading</style><style=cSub>Consumes all charges on use but becomes stronger for each charge consumed</style>",
+		"ES_KEYWORD_MARKING":"<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>",
+		"ES_KEYWORD_ADAPTIVE":"<style=cKeywordName>Unyielding</style><style=cSub>Knockback immunity and incoming instances of damage are limited to 20% of max health</style>",
+		"ES_KEYWORD_PREPARE":"<style=cKeywordName>Prepare</style><style=cSub>Refreshes a stock of an ability</style>"
+	}
+}

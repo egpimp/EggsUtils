@@ -9,7 +9,7 @@ using static R2API.ContentAddition;
 namespace EggsUtils.Buffs
 {
     public class BuffsLoading
-    {        
+    {
         //Buffdefs
         public static BuffDef buffDefTemporalChains;
         public static BuffDef buffDefTracking;
@@ -32,33 +32,33 @@ namespace EggsUtils.Buffs
         internal static void SetupBuffs()
         {
             //Stacking slow.  At 8 stacks instead take a burst of damage, stun for two seconds, and reset stacks
-            buffDefTemporalChains = BuffBuilder(Color.blue, true, Assets.doesNotExist, true, "Temporal Chains");
+            buffDefTemporalChains = BuffBuilder(Color.blue, true, EggAssets.doesNotExist, true, "Temporal Chains");
             temporalChainsOnHit = AssignNewDamageType(buffDefTemporalChains, 0f, TemporalChainHandler);
             defList.Add(buffDefTemporalChains);
 
             //Slowed and takes increased damage
-            buffDefTracking = BuffBuilder(Color.magenta, false, Assets.doesNotExist, true, "Tracked");
+            buffDefTracking = BuffBuilder(Color.magenta, false, EggAssets.doesNotExist, true, "Tracked");
             trackingOnHit = AssignNewDamageType(buffDefTracking, 5f);
             defList.Add(buffDefTracking);
 
             //Incoming damage capped
-            buffDefAdaptive = BuffBuilder(Color.blue, false, Assets.doesNotExist, false, "Adaptive Armor");
+            buffDefAdaptive = BuffBuilder(Color.blue, false, EggAssets.doesNotExist, false, "Adaptive Armor");
             defList.Add(buffDefAdaptive);
 
             //Cannot die
-            buffDefUndying = BuffBuilder(Color.red, false, Assets.doesNotExist, false, "Undying");
+            buffDefUndying = BuffBuilder(Color.red, false, EggAssets.doesNotExist, false, "Undying");
             defList.Add(buffDefUndying);
 
             //Deal more damage + Move speed
-            buffDefCunning = BuffBuilder(Color.blue, false, Assets.doesNotExist, false, "Cunning");
+            buffDefCunning = BuffBuilder(Color.blue, false, EggAssets.doesNotExist, false, "Cunning");
             defList.Add(buffDefCunning);
 
             //+Damage per stack
-            buffDefStackingDamage = BuffBuilder(Color.red, false, Assets.doesNotExist, false, "StackingDamage");
+            buffDefStackingDamage = BuffBuilder(Color.red, false, EggAssets.doesNotExist, false, "StackingDamage");
             defList.Add(buffDefStackingDamage);
 
             //Adds all the buffs via R2API (Thanks r2api devs)
-            foreach(BuffDef def in defList) AddBuffDef(def);
+            foreach (BuffDef def in defList) AddBuffDef(def);
         }
 
         //Helps us handle custom damage types
@@ -187,7 +187,7 @@ namespace EggsUtils.Buffs
             //And boom return the index in form 0.yyyy where y is our index
             return Convert.ToSingle(decodedIndex);
         }
-        
+
         //Takes the intended proc coefficient and tags on the damagetype index
         public static float ProcToDamageTypeEncoder(float damageIndex, float procCoeffToEncode)
         {
@@ -196,7 +196,7 @@ namespace EggsUtils.Buffs
             //Gets us just the proc coefficient in case there is random garbage floating behind it
             var flattenedProc = Math.Floor(intProc);
             //Add the index we are using to trail behind the proc coefficient and return it to 'normal'
-            var encodedCoeff = (flattenedProc + damageIndex)/10;
+            var encodedCoeff = (flattenedProc + damageIndex) / 10;
             //Return the weird thing we just made
             return Convert.ToSingle(encodedCoeff);
         }

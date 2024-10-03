@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using RoR2;
+﻿using RoR2;
+using UnityEngine;
 
 namespace EggsUtils.Buffs.BuffComponents
 {
     [RequireComponent(typeof(CharacterBody))]
-    class TemporalChainHandler : MonoBehaviour
+    internal class TemporalChainHandler : MonoBehaviour
     {
         //Body of the person afflicted
         private CharacterBody characterBody;
@@ -32,10 +32,10 @@ namespace EggsUtils.Buffs.BuffComponents
         private void FixedUpdate()
         {
             //If they would have more than 8 stacks of the buff somehow
-            if(characterBody.GetBuffCount(BuffsLoading.buffDefTemporalChains) > 8)
+            if (characterBody.GetBuffCount(BuffsLoading.buffDefTemporalChains) > 8)
             {
                 //Remove stacks until we are at 8
-                for(int i = 0; i < characterBody.GetBuffCount(BuffsLoading.buffDefTemporalChains) - 8; i++) characterBody.RemoveBuff(BuffsLoading.buffDefTemporalChains);
+                for (int i = 0; i < characterBody.GetBuffCount(BuffsLoading.buffDefTemporalChains) - 8; i++) characterBody.RemoveBuff(BuffsLoading.buffDefTemporalChains);
             }
 
             //Set stack count tracker

@@ -1,25 +1,32 @@
-﻿using UnityEngine;
-using R2API;
-using System;
+﻿using RoR2;
 using Mono.Cecil;
-using RoR2;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace EggsUtils.Properties
 {
-    public static class Assets
+    public static class EggAssets
     {
         //Paths to buffdefs we steal icons from
         internal static string trackingDefPath = "RoR2/Base/CritOnUse/bdFullCrit.asset";
         internal static string armorDefPath = "RoR2/Base/Common/bdArmorBoost.asset";
         internal static Sprite doesNotExist;
 
+        //Path for our lang folder
+        internal const string LangFolder = "egmods_languages";
+        internal static string RootLangFolderPath => System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), LangFolder);
+
         internal static void RegisterAssets()
         {
-            RegisterTokens();
-            EggsUtils.LogToConsole("Tokens registered");
+            if (Directory.Exists(RootLangFolderPath)) Language.collectLanguageRootFolders += RegisterTokensFolder;
+            else Log.LogError("Could not find eggmods language folder");
+            Log.LogMessage("Tokens registered");
             RegisterSprites();
-            EggsUtils.LogToConsole("Buff Icons registered");
+            Log.LogMessage("Buff Icons registered");
         }
 
         private static void RegisterSprites()
@@ -32,16 +39,13 @@ namespace EggsUtils.Properties
             Buffs.BuffsLoading.buffDefAdaptive.iconSprite = armorDef.iconSprite;
             Buffs.BuffsLoading.buffDefCunning.iconSprite = trackingDef.iconSprite;
             Buffs.BuffsLoading.buffDefTracking.iconSprite = trackingDef.iconSprite;
+
         }
 
-        private static void RegisterTokens()
+        private static void RegisterTokensFolder(List<string> list)
         {
-            //Establish all the keyword tokens
-            LanguageAPI.Add("KEYWORD_ENHANCING", "<style=cKeywordName>Overloading</style><style=cSub>Consumes all charges on use but becomes stronger for each charge consumed</style>");
-            LanguageAPI.Add("KEYWORD_MARKING", "<style=cKeywordName>Tracking</style><style=cSub>Slows enemies and increases damage towards them</style>");
-            LanguageAPI.Add("KEYWORD_STASIS", "<style=cKeywordName>Stasis</style><style=cSub>Units in stasis are invulnerable but cannot act</style>");
-            LanguageAPI.Add("KEYWORD_ADAPTIVE", "<style=cKeywordName>Unyielding</style><style=cSub>Knockback immunity and incoming instances of damage are limited to 20% of max health</style>");
-            LanguageAPI.Add("KEYWORD_PREPARE", "<style=cKeywordName>Prepare</style><style=cSub>Refreshes a stock of an ability</style>");
+            //Add our folder full of language tokens to be loaded
+            list.Add(RootLangFolderPath);
         }
 
         //Converts a 2d tex to an actual sprite
