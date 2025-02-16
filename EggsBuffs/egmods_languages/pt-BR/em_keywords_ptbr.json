@@ -1,0 +1,9 @@
+{
+	"strings":
+	{
+		"ES_KEYWORD_ENHANCING":"<style=cKeywordName>Sobrecarga</style><style=cSub>Consome todas as cargas de uma vez só mas fica mais forte a cada carga</style>",
+		"ES_KEYWORD_MARKING":"<style=cKeywordName>No Encalço</style><style=cSub>Desacelera inimigos e aumenta todo o dano causado a ele</style>",
+		"ES_KEYWORD_ADAPTIVE":"<style=cKeywordName>Obstinado</style><style=cSub>Imunidade à recuo. Instâncias seguintes de dano são reduzidas a 20% da vida máxima</style>",
+		"ES_KEYWORD_PREPARE":"<style=cKeywordName>Preparo</style><style=cSub>Recarrega uma carga de uma habilidade</style>"
+	}
+}

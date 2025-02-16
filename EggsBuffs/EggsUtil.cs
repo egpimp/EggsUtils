@@ -20,7 +20,7 @@ namespace EggsUtils
         //Mod strings
         public const string COMPAT_NAME = "com.Egg.EggsUtils";
         public const string COMPAT_TITLE = "EggsUtils";
-        public const string COMPAT_VERS = "1.2.8";
+        public const string COMPAT_VERS = "1.2.10";
         //Hard Dependancies
         public const string API_NAME = "com.bepis.r2api";
 
